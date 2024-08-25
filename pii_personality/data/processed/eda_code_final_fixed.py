@@ -10,12 +10,12 @@ from dotenv import load_dotenv
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-from constants import project, version
+from ..pii_personality.src.constants import PROJECT, VERSION
 
 load_dotenv()
 
-project = project
-version = version
+project = PROJECT
+version = VERSION
 
 # Log in to W&B
 wandb.login(key=os.getenv("WANDB_API_KEY"))
@@ -66,15 +66,15 @@ wandb.log({"feature_engineered_data": wandb.Table(dataframe=df)})
 
 # Splitting data (train_test_split in model training files)
 df_features = df.copy()
-y = df_features['target']  # Target variable
-X = df_features.drop(columns=['target']) # Features
+
+X = df_features
 
 print("Normalising numerical values...")
 
 # Normalize the relevant numerical features
 scaler = StandardScaler()
 if y.values.any():
-    numerical_cols = X.select_dtypes(include=[np.number]).columns.tolist()
+    numerical_cols = X.select_dtypes(include=[np.number], exclude=["target"]).columns.tolist()
 
 df_transform = scaler.fit_transform(X[numerical_cols])
 df_transform = pd.DataFrame(df_transform)
