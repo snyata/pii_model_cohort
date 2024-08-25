@@ -1,12 +1,11 @@
-from .constants import PROJECT, VERSION
+from constants import PROJECT, VERSION
 import json
 import os
 import random
 from typing import Any, Dict, Tuple
-
+import wandb
 import pandas as pd
 import torch
-import wandb
 from dotenv import load_dotenv
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectKBest, f_classif
@@ -43,15 +42,16 @@ def initialize_project(project: str, version: str) -> Tuple[pd.DataFrame, pd.Ser
             - models (dict): A dictionary of model instances.
     """
     print('initializing project')
-    data_path = "/Users/nullzero/Documents/repos/github.com/privacy-identity/vda-simulation-medical/vda-sim-medical/data/processed/PII_Customer_Personality_Analysis/data/2024_08_25_PII_Customer_Personality_Analysis_v0.1.csv"
+    data_path = "/Users/nullzero/Documents/repos/github.com/privacy-identity/vda-simulation-medical/vda-sim-medical/pii_personality/data/versions/2024_08_25_PII_Customer_Personality_Analysis_v0.1.csv"
     
     # Load the processed data
     df_processed = pd.read_csv(data_path)
     
     print("splitting dataset...")
     # Train-Test Split
-    X = df_processed.drop(columns=['target'])
-    y = df_processed['target']
+    df_target = df_processed.copy()
+    X = df_processed
+    y = df_target['target']
 
     # Select the top 10 features
     print("Selecting best features...")
@@ -180,7 +180,7 @@ def json_convert(input_dict: Dict[str, Any], project: str) -> str:
     return file_path
 
 
-def main():
+def main(project=project, version=version):
     device = "mps" if torch.backends.mps.is_available() else "cpu"
     
     print("Initializing project...")
