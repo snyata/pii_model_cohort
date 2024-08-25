@@ -2,14 +2,13 @@ import os
 
 import pandas as pd
 import torch
+import wandb
 from dotenv import load_dotenv
 from sklearn.cluster import AgglomerativeClustering, KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-
-import wandb
 
 load_dotenv()
 

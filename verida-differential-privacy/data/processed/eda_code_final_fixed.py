@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import wandb
 from dotenv import load_dotenv
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-import wandb
 from constants import project, version
 
 load_dotenv()

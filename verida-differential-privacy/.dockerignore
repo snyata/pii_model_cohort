@@ -1,0 +1,32 @@
+# Python files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+**/*.env
+
+# Poetry files
+poetry.lock
+
+# Distribution / packaging
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+venv/
+.env
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Editor and OS specific files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

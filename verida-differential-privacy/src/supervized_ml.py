@@ -5,6 +5,7 @@ from typing import Any, Dict, Tuple
 
 import pandas as pd
 import torch
+import wandb
 from dotenv import load_dotenv
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectKBest, f_classif
@@ -14,8 +15,6 @@ from sklearn.metrics import (accuracy_score, classification_report,
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
-
-import wandb
 
 # Load environment variables
 load_dotenv()

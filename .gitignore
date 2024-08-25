@@ -4,3 +4,4 @@ poetry.lock
 **/.env
 .DS_Store
 **/wandb/
+dist/
