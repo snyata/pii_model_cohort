@@ -1,0 +1,6 @@
+__pycache__/
+poetry.lock
+*.env
+**/.env
+.DS_Store
+**/wandb/

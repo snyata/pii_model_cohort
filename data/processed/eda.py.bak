@@ -1,0 +1,104 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.model_selection import train_test_split
+from sklearn.cluster import KMeans, AgglomerativeClustering
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import silhouette_score
+
+# Load the data
+file_path = 'customer_profile_marketing.csv'
+df = pd.read_csv(file_path)
+
+# Initial Analysis
+print("Initial DataFrame Info:")
+df.info()
+print("\nInitial DataFrame Head:")
+print(df.head())
+
+# Drop irrelevant columns
+df = df.drop(columns=['Unnamed: 0', 'ID', 'Dt_Customer', 'Z_CostContact', 'Z_Revenue'])
+
+# Handle missing values (if any)
+print("Missing Values: {}", df.isna().sum())
+df = df.dropna()
+
+# Feature Engineering
+# Calculate age from 'Year_Birth'
+df['Age'] = 2024 - df['Year_Birth']  # Assuming the current year is 2024
+df = df.drop(columns=['Year_Birth'])
+
+# Convert categorical variables to numerical format using Label Encoding
+label_encoder = LabelEncoder()
+df['Education'] = label_encoder.fit_transform(df['Education'])
+df['Marital_Status'] = label_encoder.fit_transform(df['Marital_Status'])
+
+df.to_csv("./data_pre_processed_v1")
+# Correlation Analysis
+corr_matrix = df.corr()
+plt.figure(figsize=(16, 12))
+sns.heatmap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', square=True)
+plt.title('Correlation Matrix')
+plt.show()
+
+# Feature Selection using SelectKBest
+X = df.drop(columns=['Response'])  # Features
+y = df['Response']  # Target variable
+
+# Select the top 10 features
+selector = SelectKBest(score_func=f_classif, k=10)
+X_new = selector.fit_transform(X, y)
+
+# Get the columns selected
+selected_features = X.columns[selector.get_support()]
+print("Selected Features:")
+print(selected_features)
+
+# Drop unimportant features
+df_processed = df[selected_features]
+df_processed['Response'] = y
+
+# Normalize the relevant numerical features
+scaler = StandardScaler()
+numerical_cols = df_processed.select_dtypes(include=[np.number]).columns.tolist()
+numerical_cols.remove('Response')  # Remove the target variable from the list
+
+df_processed[numerical_cols] = scaler.fit_transform(df_processed[numerical_cols])
+
+# Encoding categorical variables (already encoded with LabelEncoder)
+# No additional encoding is necessary if the categorical columns have been encoded
+
+# Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(df_processed.drop(columns=['Response']),
+                                                    df_processed['Response'],
+                                                    test_size=0.3,
+                                                    random_state=42)
+
+# Clustering Algorithms
+# 1. KMeans
+kmeans = KMeans(n_clusters=2, random_state=42)
+kmeans.fit(X_train)
+kmeans_labels = kmeans.predict(X_test)
+kmeans_silhouette = silhouette_score(X_test, kmeans_labels)
+print(f"KMeans Silhouette Score: {kmeans_silhouette:.2f}")
+
+# 2. Agglomerative Clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+agg_labels = agg_clustering.fit_predict(X_test)
+agg_silhouette = silhouette_score(X_test, agg_labels)
+print(f"Agglomerative Clustering Silhouette Score: {agg_silhouette:.2f}")
+
+# Summary of Results
+print("\nSummary of Clustering Results:")
+print(f"KMeans Silhouette Score: {kmeans_silhouette:.2f}")
+print(f"Agglomerative Clustering Silhouette Score: {agg_silhouette:.2f}")
+
+# Optional: If you want to use a pipeline for scaling and clustering together
+# pipeline = Pipeline([('scaler', StandardScaler()), ('kmeans', KMeans(n_clusters=2, random_state=42))])
+# pipeline.fit(X_train)
+# pipeline_labels = pipeline.predict(X_test)
+# pipeline_silhouette = silhouette_score(X_test, pipeline_labels)
+# print(f"Pipeline KMeans Silhouette Score: {pipeline_silhouette:.2f}")
