@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "verida-differential-privacy"
+name = "pii_personality"
 version = "0.1.0"
 description = "A demonstration of using the PyTorch differential privacy library and a login DiD"
 authors = ["snyata <core@synavate.tech>"]
@@ -17,6 +17,7 @@ didkit = "^0.3.3"
 scikit-learn = "^1.5.1"
 matplotlib = "^3.9.2"
 seaborn = "^0.13.2"
+verida-differential-privacy = { path = "./verida-differential-privacy/src" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "8.3.2"
