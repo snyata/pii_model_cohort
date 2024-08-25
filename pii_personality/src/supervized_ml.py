@@ -20,7 +20,7 @@ from sklearn.svm import SVC
 load_dotenv()
 
 # Load project details
-from eda_code_final_fixed import project, version
+from constants import project, version
 
 
 def initialize_project(project: str, version: str) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series, Dict[str, Any]]:
@@ -39,16 +39,19 @@ def initialize_project(project: str, version: str) -> Tuple[pd.DataFrame, pd.Ser
             - y_test (pd.Series): The testing targets.
             - models (dict): A dictionary of model instances.
     """
+    print('initializing project')
     data_path = "/Users/nullzero/Documents/repos/github.com/privacy-identity/vda-simulation-medical/vda-sim-medical/data/processed/PII_Customer_Personality_Analysis/data/2024_08_25_PII_Customer_Personality_Analysis_v0.1.csv"
     
     # Load the processed data
     df_processed = pd.read_csv(data_path)
     
+    print("splitting dataset...")
     # Train-Test Split
     X = df_processed.drop(columns=['target'])
     y = df_processed['target']
 
     # Select the top 10 features
+    print("Selecting best features...")
     selector = SelectKBest(score_func=f_classif, k=10)
     X_new = selector.fit_transform(X, y)
     selected_features = X.columns[selector.get_support()]
