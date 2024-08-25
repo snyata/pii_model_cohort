@@ -17,7 +17,7 @@ didkit = "^0.3.3"
 scikit-learn = "^1.5.1"
 matplotlib = "^3.9.2"
 seaborn = "^0.13.2"
-verida-differential-privacy = { path = "./verida-differential-privacy/src" }
+
 
 [tool.poetry.group.dev.dependencies]
 pytest = "8.3.2"
@@ -25,6 +25,7 @@ pip-tools = "^7.4.1"
 isort = "^5.13.2"
 datasets = "^2.21.0"
 jupyter = "^1.0.0"
+torch = "^2.4.0"
 
 [build-system]
 requires = ["poetry-core"]

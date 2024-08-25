@@ -1,0 +1,3 @@
+'''CONSTANTS FOR USE ACROSS PROJECT'''
+PROJECT = "PII_Customer_Personality_Analysis"
+VERSION = 0.1

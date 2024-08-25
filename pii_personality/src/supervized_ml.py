@@ -1,3 +1,4 @@
+from .constants import PROJECT, VERSION
 import json
 import os
 import random
@@ -20,8 +21,10 @@ from sklearn.svm import SVC
 load_dotenv()
 
 # Load project details
-from constants import project, version
 
+
+project = PROJECT
+version = VERSION
 
 def initialize_project(project: str, version: str) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series, Dict[str, Any]]:
     """
